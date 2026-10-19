@@ -40,75 +40,6 @@
     }
     a { color: inherit; text-decoration: none; }
 
-    [hidden] { display: none !important; }
-
-    .password-gate {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-    .password-form {
-      width: min(100%, 380px);
-      padding: 32px;
-      background: rgba(12, 19, 28, 0.96);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      box-shadow: 0 20px 60px var(--shadow);
-    }
-
-    .password-form h1 {
-      margin: 0 0 22px;
-      color: var(--teal);
-      font-family: "Orbitron", sans-serif;
-      font-size: 1.5rem;
-    }
-
-    .password-form label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .password-form input {
-      width: 100%;
-      height: 44px;
-      padding: 0 12px;
-      color: var(--text);
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      font: inherit;
-    }
-
-    .password-form input:focus-visible,
-    .password-form button:focus-visible {
-      outline: 2px solid var(--teal);
-      outline-offset: 3px;
-    }
-
-    .password-form button {
-      width: 100%;
-      min-height: 44px;
-      margin-top: 14px;
-      color: var(--bg);
-      background: var(--teal);
-      border: 0;
-      border-radius: 6px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .password-error {
-      min-height: 1.2em;
-      margin: 12px 0 0;
-      color: #ff8a8a;
-      font-size: 0.8rem;
-    }
-
     .page {
       width: min(100%, 1440px);
       margin: 0 auto;
@@ -244,17 +175,7 @@
   </style>
 </head>
 <body>
-  <section class="password-gate" id="passwordGate">
-    <form class="password-form" id="passwordForm">
-      <h1>Rocket Game Corner Status</h1>
-      <label for="sitePassword">Enter password</label>
-      <input id="sitePassword" type="password" autocomplete="current-password" required autofocus>
-      <button type="submit">Unlock</button>
-      <p class="password-error" id="passwordError" role="alert" aria-live="polite"></p>
-    </form>
-  </section>
-
-  <div class="page" id="siteContent" hidden>
+  <div class="page">
     <header class="hero" aria-label="Game portal header">
       <div class="hero-inner">
         <h1 class="title">Rocket Game Corner Status</h1>
@@ -270,98 +191,5 @@
     </main>
   </div>
 
-  <script>
-    // Set your own password here. This client-side check is not secure access control.
-    const SITE_PASSWORD = 'Gausel';
-    const passwordGate = document.getElementById('passwordGate');
-    const siteContent = document.getElementById('siteContent');
-    const passwordForm = document.getElementById('passwordForm');
-    const passwordError = document.getElementById('passwordError');
-    const failedAttemptsKey = 'rocket-game-corner-failed-attempts';
-    const lockoutUntilKey = 'rocket-game-corner-lockout-until';
-    const lockoutDuration = 3 * 60 * 1000;
-    let failedAttempts = Number(sessionStorage.getItem(failedAttemptsKey)) || 0;
-    let lockoutTimer;
-
-    function unlockSite() {
-      passwordGate.hidden = true;
-      siteContent.hidden = false;
-    }
-
-    function startLockout(until) {
-      const passwordInput = document.getElementById('sitePassword');
-      const submitButton = passwordForm.querySelector('button[type="submit"]');
-
-      passwordInput.disabled = true;
-      submitButton.disabled = true;
-
-      function updateLockoutMessage() {
-        const remainingSeconds = Math.ceil((until - Date.now()) / 1000);
-        if (remainingSeconds <= 0) {
-          window.clearInterval(lockoutTimer);
-          sessionStorage.removeItem(failedAttemptsKey);
-          sessionStorage.removeItem(lockoutUntilKey);
-          failedAttempts = 0;
-          passwordInput.disabled = false;
-          submitButton.disabled = false;
-          passwordError.textContent = 'You can try again.';
-          passwordInput.focus();
-          return;
-        }
-
-        const minutes = Math.floor(remainingSeconds / 60);
-        const seconds = String(remainingSeconds % 60).padStart(2, '0');
-        passwordError.textContent = `Too many incorrect attempts. Try again in ${minutes}:${seconds}.`;
-      }
-
-      updateLockoutMessage();
-      lockoutTimer = window.setInterval(updateLockoutMessage, 1000);
-    }
-
-    if (sessionStorage.getItem('rocket-game-corner-unlocked') === 'true') {
-      unlockSite();
-    } else {
-      const lockoutUntil = Number(sessionStorage.getItem(lockoutUntilKey));
-      if (lockoutUntil > Date.now()) {
-        startLockout(lockoutUntil);
-      } else if (sessionStorage.getItem(lockoutUntilKey) !== null) {
-        sessionStorage.removeItem(failedAttemptsKey);
-        sessionStorage.removeItem(lockoutUntilKey);
-        failedAttempts = 0;
-      }
-    }
-
-    passwordForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (Number(sessionStorage.getItem(lockoutUntilKey)) > Date.now()) {
-        return;
-      }
-
-      const enteredPassword = document.getElementById('sitePassword').value;
-
-      if (enteredPassword === SITE_PASSWORD) {
-        sessionStorage.removeItem(failedAttemptsKey);
-        sessionStorage.removeItem(lockoutUntilKey);
-        sessionStorage.setItem('rocket-game-corner-unlocked', 'true');
-        unlockSite();
-        return;
-      }
-
-      failedAttempts += 1;
-      sessionStorage.setItem(failedAttemptsKey, String(failedAttempts));
-      if (failedAttempts >= 2) {
-        const lockoutUntil = Date.now() + lockoutDuration;
-        sessionStorage.setItem(lockoutUntilKey, String(lockoutUntil));
-        startLockout(lockoutUntil);
-        window.location.assign('https://asdk12.instructure.com/');
-        return;
-      }
-
-      passwordError.textContent = 'Incorrect password. One more try.';
-      passwordForm.reset();
-      document.getElementById('sitePassword').focus();
-    });
-
-  </script>
 </body>
 </html>
