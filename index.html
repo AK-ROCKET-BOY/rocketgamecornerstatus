@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070d16">
+  <title>Rocket Game Corner</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <script>
+    if (window.self === window.top) {
+      window.location.replace('https://asdk12.instructure.com/');
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050b14;
+      --bg-2: #0b1320;
+      --panel: rgba(17, 23, 34, 0.84);
+      --panel-strong: rgba(11, 16, 24, 0.96);
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #edf1f7;
+      --muted: rgba(237, 241, 247, 0.78);
+      --teal: #22f7d7;
+      --teal-soft: rgba(34, 247, 215, 0.18);
+      --shadow: rgba(0, 0, 0, 0.42);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, rgba(19, 32, 46, 0.85), rgba(5, 11, 20, 1) 44%);
+      color: var(--text);
+      font-family: "DM Mono", monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    [hidden] { display: none !important; }
+
+    .password-gate {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .password-form {
+      width: min(100%, 380px);
+      padding: 32px;
+      background: rgba(12, 19, 28, 0.96);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px var(--shadow);
+    }
+
+    .password-form h1 {
+      margin: 0 0 22px;
+      color: var(--teal);
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.5rem;
+    }
+
+    .password-form label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .password-form input {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    .password-form input:focus-visible,
+    .password-form button:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 3px;
+    }
+
+    .password-form button {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 14px;
+      color: var(--bg);
+      background: var(--teal);
+      border: 0;
+      border-radius: 6px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .password-error {
+      min-height: 1.2em;
+      margin: 12px 0 0;
+      color: #ff8a8a;
+      font-size: 0.8rem;
+    }
+
+    .page {
+      width: min(100%, 1440px);
+      margin: 0 auto;
+      padding: 32px 20px 36px;
+    }
+
+    .hero {
+      background: rgba(12, 19, 28, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 20px 20px 0 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+      min-height: 248px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-inner {
+      width: min(100%, 980px);
+      text-align: center;
+      padding: 38px 24px 42px;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(1.4rem, 5vw, 4.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.025em;
+      font-weight: 900;
+      color: var(--teal);
+      text-shadow: 0 0 16px rgba(34, 247, 215, 0.65);
+    }
+
+    .tagline {
+      margin: 22px auto 0;
+      font-size: clamp(1rem, 1.5vw, 1.8rem);
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.82);
+      font-style: italic;
+      letter-spacing: -0.04em;
+      font-family: "DM Mono", monospace;
+    }
+
+    .games-panel {
+      background: rgba(12, 19, 28, 0.9);
+      border: 1px solid var(--line);
+      border-top: 0;
+      border-radius: 0 0 20px 20px;
+      padding: 26px 20px 20px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 28px 22px;
+    }
+
+    .game-card {
+      position: relative;
+      height: 170px;
+      display: block;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(180deg, rgba(15, 20, 29, 0.24), rgba(15, 20, 29, 0.76)), var(--image);
+      background-size: cover;
+      background-position: center center;
+      filter: saturate(0.82) contrast(1.05) brightness(0.7);
+      transform: scale(1.02);
+    }
+
+    .game-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(9, 13, 18, 0.1), rgba(9, 13, 18, 0.36));
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
+      border-color: rgba(34, 247, 215, 0.26);
+    }
+
+    .card-label {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      right: 12px;
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.96);
+      font-size: clamp(0.96rem, 1.05vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 1180px) {
+      .game-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 880px) {
+      .page { padding-left: 16px; padding-right: 16px; }
+      .hero { min-height: 210px; }
+      .game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .page { padding: 18px 12px 20px; }
+      .hero { border-radius: 14px 14px 0 0; }
+      .hero-inner { padding: 28px 16px 30px; }
+      .tagline { margin-top: 16px; }
+      .games-panel { border-radius: 0 0 14px 14px; padding: 18px 12px 12px; }
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .game-card { height: 148px; }
+      .card-label { left: 12px; right: 10px; bottom: 12px; white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <section class="password-gate" id="passwordGate">
+    <form class="password-form" id="passwordForm">
+      <h1>Rocket Game Corner</h1>
+      <label for="sitePassword">Enter password</label>
+      <input id="sitePassword" type="password" autocomplete="current-password" required autofocus>
+      <button type="submit">Unlock</button>
+      <p class="password-error" id="passwordError" role="alert" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <div class="page" id="siteContent" hidden>
+    <header class="hero" aria-label="Game portal header">
+      <div class="hero-inner">
+        <h1 class="title">Rocket Game Corner</h1>
+        <p class="tagline">If you know, you know</p>
+      </div>
+    </header>
+
+  </div>
+
+  <script>
+    // Set your own password here. This client-side check is not secure access control.
+    const SITE_PASSWORD = 'Gausel';
+    const passwordGate = document.getElementById('passwordGate');
+    const siteContent = document.getElementById('siteContent');
+    const passwordForm = document.getElementById('passwordForm');
+    const passwordError = document.getElementById('passwordError');
+    const failedAttemptsKey = 'rocket-game-corner-failed-attempts';
+    const lockoutUntilKey = 'rocket-game-corner-lockout-until';
+    const lockoutDuration = 3 * 60 * 1000;
+    let failedAttempts = Number(sessionStorage.getItem(failedAttemptsKey)) || 0;
+    let lockoutTimer;
+
+    function unlockSite() {
+      passwordGate.hidden = true;
+      siteContent.hidden = false;
+    }
+
+    function startLockout(until) {
+      const passwordInput = document.getElementById('sitePassword');
+      const submitButton = passwordForm.querySelector('button[type="submit"]');
+
+      passwordInput.disabled = true;
+      submitButton.disabled = true;
+
+      function updateLockoutMessage() {
+        const remainingSeconds = Math.ceil((until - Date.now()) / 1000);
+        if (remainingSeconds <= 0) {
+          window.clearInterval(lockoutTimer);
+          sessionStorage.removeItem(failedAttemptsKey);
+          sessionStorage.removeItem(lockoutUntilKey);
+          failedAttempts = 0;
+          passwordInput.disabled = false;
+          submitButton.disabled = false;
+          passwordError.textContent = 'You can try again.';
+          passwordInput.focus();
+          return;
+        }
+
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = String(remainingSeconds % 60).padStart(2, '0');
+        passwordError.textContent = `Too many incorrect attempts. Try again in ${minutes}:${seconds}.`;
+      }
+
+      updateLockoutMessage();
+      lockoutTimer = window.setInterval(updateLockoutMessage, 1000);
+    }
+
+    if (sessionStorage.getItem('rocket-game-corner-unlocked') === 'true') {
+      unlockSite();
+    } else {
+      const lockoutUntil = Number(sessionStorage.getItem(lockoutUntilKey));
+      if (lockoutUntil > Date.now()) {
+        startLockout(lockoutUntil);
+      } else if (sessionStorage.getItem(lockoutUntilKey) !== null) {
+        sessionStorage.removeItem(failedAttemptsKey);
+        sessionStorage.removeItem(lockoutUntilKey);
+        failedAttempts = 0;
+      }
+    }
+
+    passwordForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (Number(sessionStorage.getItem(lockoutUntilKey)) > Date.now()) {
+        return;
+      }
+
+      const enteredPassword = document.getElementById('sitePassword').value;
+
+      if (enteredPassword === SITE_PASSWORD) {
+        sessionStorage.removeItem(failedAttemptsKey);
+        sessionStorage.removeItem(lockoutUntilKey);
+        sessionStorage.setItem('rocket-game-corner-unlocked', 'true');
+        unlockSite();
+        return;
+      }
+
+      failedAttempts += 1;
+      sessionStorage.setItem(failedAttemptsKey, String(failedAttempts));
+      if (failedAttempts >= 2) {
+        const lockoutUntil = Date.now() + lockoutDuration;
+        sessionStorage.setItem(lockoutUntilKey, String(lockoutUntil));
+        startLockout(lockoutUntil);
+        window.location.assign('https://asdk12.instructure.com/');
+        return;
+      }
+
+      passwordError.textContent = 'Incorrect password. One more try.';
+      passwordForm.reset();
+      document.getElementById('sitePassword').focus();
+    });
+
+  </script>
+</body>
+</html>
