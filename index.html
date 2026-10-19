@@ -63,6 +63,14 @@
       padding: 38px 24px 42px;
     }
 
+    .brand-icon {
+      display: block;
+      width: 64px;
+      height: 62px;
+      margin: 0 auto 14px;
+      object-fit: contain;
+    }
+
     .title {
       margin: 0;
       font-family: "Orbitron", sans-serif;
@@ -116,9 +124,10 @@
       position: absolute;
       inset: 0;
       background-image: linear-gradient(180deg, rgba(15, 20, 29, 0.24), rgba(15, 20, 29, 0.76)), var(--image);
-      background-size: cover;
-      background-position: center center;
-      filter: saturate(0.82) contrast(1.05) brightness(0.7);
+      background-size: cover, contain;
+      background-repeat: no-repeat;
+      background-position: center, center;
+      filter: saturate(1) contrast(1.05) brightness(0.95);
       transform: scale(1.02);
     }
 
@@ -178,13 +187,14 @@
   <div class="page">
     <header class="hero" aria-label="Game portal header">
       <div class="hero-inner">
+        <img class="brand-icon" src="./favicon.svg" alt="">
         <h1 class="title">Rocket Game Corner Status</h1>
         <p class="tagline">Status + Link to Rocket Game Corner</p>
       </div>
     </header>
     <main class="games-panel" aria-label="Game list">
       <div class="game-grid">
-        <a class="game-card" href="https://rocketgamecorner1.netlify.app/" target="_blank" rel="noopener noreferrer" style="--image: linear-gradient(135deg, #183c45, #293d31);" aria-label="Open External Game">
+        <a class="game-card" href="https://rocketgamecorner1.netlify.app/" target="_blank" rel="noopener noreferrer" style="--image: url('./favicon.svg');" aria-label="Open External Game">
           <span class="card-label">Current URL</span>
         </a>
       </div>
