@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070d16">
+  <title>New Version Preview</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050b14;
+      --panel: rgba(12, 19, 28, 0.94);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #edf1f7;
+      --teal: #22f7d7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: radial-gradient(circle at top, #13202e, var(--bg) 58%);
+      color: var(--text);
+      font-family: "DM Mono", monospace;
+    }
+
+    main {
+      width: min(100%, 760px);
+      padding: clamp(28px, 7vw, 64px);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      text-align: center;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--teal);
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      line-height: 1.3;
+    }
+
+    a {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 32px;
+      padding: 12px 24px;
+      border: 1px solid var(--teal);
+      border-radius: 6px;
+      background: var(--teal);
+      color: #04110f;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 160ms ease, color 160ms ease;
+    }
+
+    a:hover, a:focus-visible {
+      background: transparent;
+      color: var(--teal);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>WARNING: This is a preview of a new version of a site! Most of the time it will not work, but if you are lucky, you will get a sneak peek at some of the new features and games.</h1>
+    <a href="https://fantastic-space-computing-qv6755746jg6246rq-8000.app.github.dev/">Continue:</a>
+  </main>
+</body>
+</html>
